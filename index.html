@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ahmed — Photographer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #111110;
+      --surface: #1c1b19;
+      --cream: #f0ebe3;
+      --muted: #8a8679;
+      --gold: #c8952a;
+      --gold-light: #e4b24a;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--cream);
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 5vw;
+      background: linear-gradient(to bottom, rgba(17,17,16,0.95), transparent);
+      backdrop-filter: blur(4px);
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      letter-spacing: 0.08em;
+      color: var(--cream);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--gold); }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--cream); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 5vw;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 60% at 70% 50%, rgba(200,149,42,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 20% 80%, rgba(200,149,42,0.04) 0%, transparent 50%);
+    }
+    /* Film strip decorative element */
+    .film-strip {
+      position: absolute;
+      right: 5vw;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      opacity: 0.18;
+    }
+    .film-hole {
+      width: 14px;
+      height: 10px;
+      border: 1.5px solid var(--gold);
+      border-radius: 2px;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.72rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+    .hero-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.5rem, 9vw, 8rem);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.3rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.4s forwards;
+    }
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(1.2rem, 3vw, 2.2rem);
+      color: var(--gold-light);
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.6s forwards;
+    }
+    .hero-bio {
+      max-width: 480px;
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.8s forwards;
+    }
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: var(--gold);
+      color: var(--bg);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 1rem 2rem;
+      transition: background 0.3s, gap 0.3s;
+      opacity: 0;
+      animation: fadeUp 0.8s 1s forwards;
+    }
+    .hero-cta:hover { background: var(--gold-light); gap: 1.2rem; }
+    .hero-cta svg { width: 14px; height: 14px; }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 5vw;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      opacity: 0;
+      animation: fadeUp 0.8s 1.2s forwards;
+    }
+    .scroll-line {
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+      animation: scrollLine 1.5s 1.5s ease-in-out infinite alternate;
+    }
+    @keyframes scrollLine { from { width: 20px; } to { width: 50px; } }
+
+    /* ── SECTIONS ── */
+    section { padding: 7rem 5vw; }
+    .section-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 3rem;
+    }
+    .divider {
+      width: 50px;
+      height: 1px;
+      background: var(--gold);
+      margin: 1.5rem 0 3rem;
+    }
+
+    /* ── ABOUT ── */
+    #about { background: var(--surface); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5vw;
+      align-items: start;
+    }
+    .about-text p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 1.2rem;
+      line-height: 1.9;
+    }
+    .about-text p strong { color: var(--cream); font-weight: 400; }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      margin-top: 0.5rem;
+    }
+    .stat-box {
+      background: var(--bg);
+      padding: 1.8rem 1.5rem;
+    }
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+    .stat-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── SKILLS ── */
+    #skills {}
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2px;
+    }
+    .skill-card {
+      background: var(--surface);
+      padding: 2rem;
+      border-top: 1px solid transparent;
+      transition: border-color 0.3s, background 0.3s;
+      cursor: default;
+    }
+    .skill-card:hover { border-color: var(--gold); background: #232220; }
+    .skill-icon {
+      font-size: 1.6rem;
+      margin-bottom: 1rem;
+    }
+    .skill-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: var(--cream);
+    }
+    .skill-desc {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* Soft skills bar */
+    .soft-skills { margin-top: 4rem; }
+    .soft-skills h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      margin-bottom: 1.5rem;
+      color: var(--cream);
+    }
+    .soft-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      list-style: none;
+    }
+    .soft-tag {
+      border: 1px solid #333;
+      padding: 0.5rem 1.2rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      transition: border-color 0.3s, color 0.3s;
+    }
+    .soft-tag:hover { border-color: var(--gold); color: var(--cream); }
+
+    /* ── PORTFOLIO ── */
+    #portfolio { background: var(--surface); }
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+    .portfolio-item {
+      aspect-ratio: 4/5;
+      background: var(--bg);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .portfolio-item:first-child { grid-column: span 2; aspect-ratio: 16/9; }
+    .portfolio-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      color: var(--muted);
+      transition: color 0.3s;
+    }
+    .portfolio-item:hover .portfolio-placeholder { color: var(--gold); }
+    .portfolio-placeholder svg { width: 40px; height: 40px; opacity: 0.4; }
+    .portfolio-placeholder span {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+    .portfolio-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(200,149,42,0.08);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .portfolio-item:hover .portfolio-overlay { opacity: 1; }
+
+    /* ── CONTACT ── */
+    #contact {}
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5vw;
+      align-items: start;
+    }
+    .contact-intro {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.9;
+      margin-bottom: 2rem;
+    }
+    .contact-links { display: flex; flex-direction: column; gap: 1rem; }
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.3s;
+    }
+    .contact-link:hover { color: var(--gold); }
+    .contact-link-icon {
+      width: 36px;
+      height: 36px;
+      border: 1px solid #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+    .form-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .form-input, .form-textarea {
+      background: var(--surface);
+      border: 1px solid #2a2a28;
+      color: var(--cream);
+      padding: 0.9rem 1rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.3s;
+      resize: none;
+    }
+    .form-input:focus, .form-textarea:focus { border-color: var(--gold); }
+    .form-textarea { height: 130px; }
+    .form-btn {
+      background: var(--gold);
+      color: var(--bg);
+      border: none;
+      padding: 1rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .form-btn:hover { background: var(--gold-light); }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid #222;
+      padding: 2rem 5vw;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    footer a { color: var(--gold); text-decoration: none; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1.2rem 5vw; }
+      .nav-links { display: none; }
+      .about-grid, .contact-grid { grid-template-columns: 1fr; }
+      .portfolio-grid { grid-template-columns: 1fr; }
+      .portfolio-item:first-child { grid-column: span 1; }
+      .about-stats { grid-template-columns: 1fr 1fr; }
+      .film-strip { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#hero">Ahmed<span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#portfolio">Work</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+
+    <!-- Decorative film strip -->
+    <div class="film-strip" aria-hidden="true">
+      <div class="film-hole"></div><div class="film-hole"></div>
+      <div class="film-hole"></div><div class="film-hole"></div>
+      <div class="film-hole"></div><div class="film-hole"></div>
+      <div class="film-hole"></div><div class="film-hole"></div>
+      <div class="film-hole"></div><div class="film-hole"></div>
+      <div class="film-hole"></div><div class="film-hole"></div>
+    </div>
+
+    <p class="hero-eyebrow">Mansehra, Pakistan</p>
+    <h1 class="hero-name">Ahmed</h1>
+    <p class="hero-title">Photographer</p>
+    <p class="hero-bio">
+      Based in the scenic city of Mansehra, I capture the beauty of the world
+      through my lens — where the calm of the mountains meets the art of light and shadow.
+    </p>
+    <a class="hero-cta" href="#portfolio">
+      View My Work
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+
+    <div class="hero-scroll">
+      <span class="scroll-line"></span>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <p class="section-label">Who I Am</p>
+    <h2 class="section-title">The Story<br>Behind the Lens</h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>
+          Hi, I'm <strong>Ahmed</strong>. Based in the scenic city of <strong>Mansehra</strong>,
+          I am a passionate photographer dedicated to capturing moments that truly matter.
+        </p>
+        <p>
+          My journey into photography started with a simple curiosity — the way light falls on
+          mountains at dusk, the way a single frame can hold an entire emotion. Today, that
+          curiosity has turned into a professional craft. I love finding the extraordinary within
+          the ordinary.
+        </p>
+        <p>
+          Living surrounded by the breathtaking landscapes of Hazara inspires every shot I take.
+          When I'm not behind the camera, you'll find me exploring the valleys of KPK or
+          keeping up with the latest trends in visual storytelling.
+        </p>
+        <div class="divider"></div>
+        <p style="font-size:0.85rem; color: #666; font-style:italic;">
+          "Based in Mansehra, I'm Ahmed — a digital creator focused on turning innovative
+          ideas into reality. Balancing the calm of the mountains with the fast pace of technology."
+        </p>
+      </div>
+
+      <div class="about-stats">
+        <div class="stat-box">
+          <div class="stat-number">∞</div>
+          <div class="stat-label">Stories told</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number">Hzr</div>
+          <div class="stat-label">Region covered</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number">📷</div>
+          <div class="stat-label">Always shooting</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Passion driven</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <p class="section-label">What I Do</p>
+    <h2 class="section-title">Core Skills &amp;<br>Expertise</h2>
+
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-icon">🏔️</div>
+        <div class="skill-name">Landscape Photography</div>
+        <div class="skill-desc">Capturing the raw beauty of mountains, valleys, and natural scenery — especially across the Hazara region and KPK.</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">🎞️</div>
+        <div class="skill-name">Photo Editing</div>
+        <div class="skill-desc">Post-processing with tools like Lightroom & Photoshop to bring out mood, color, and atmosphere in every image.</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">👤</div>
+        <div class="skill-name">Portrait Photography</div>
+        <div class="skill-desc">Telling human stories through candid and posed portraits — connecting the subject to their environment naturally.</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">📱</div>
+        <div class="skill-name">Content Creation</div>
+        <div class="skill-desc">Creating visual content for social media, personal branding, and digital platforms with a clear creative direction.</div>
+      </div>
+    </div>
+
+    <div class="soft-skills">
+      <h3>Soft Skills</h3>
+      <ul class="soft-list">
+        <li class="soft-tag">Problem Solving</li>
+        <li class="soft-tag">Creative Thinking</li>
+        <li class="soft-tag">Clear Communication</li>
+        <li class="soft-tag">Adaptability</li>
+        <li class="soft-tag">Continuous Learning</li>
+        <li class="soft-tag">Time Management</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- PORTFOLIO -->
+  <section id="portfolio">
+    <p class="section-label">My Work</p>
+    <h2 class="section-title">Selected<br>Photography</h2>
+
+    <div class="portfolio-grid">
+      <div class="portfolio-item">
+        <div class="portfolio-overlay"></div>
+        <div class="portfolio-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+            <rect x="3" y="5" width="18" height="14" rx="2"/>
+            <circle cx="12" cy="12" r="3.5"/>
+            <circle cx="17.5" cy="7.5" r="0.8" fill="currentColor"/>
+          </svg>
+          <span>Featured Shot</span>
+        </div>
+      </div>
+      <div class="portfolio-item">
+        <div class="portfolio-overlay"></div>
+        <div class="portfolio-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          </svg>
+          <span>Mansehra</span>
+        </div>
+      </div>
+      <div class="portfolio-item">
+        <div class="portfolio-overlay"></div>
+        <div class="portfolio-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+            <path d="M8 6l4-4 4 4M12 2v10.5"/>
+            <path d="M3 15s2-3 9-3 9 3 9 3v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4z"/>
+          </svg>
+          <span>Hazara Valley</span>
+        </div>
+      </div>
+      <div class="portfolio-item">
+        <div class="portfolio-overlay"></div>
+        <div class="portfolio-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10"/>
+            <path d="M2 12h20"/>
+          </svg>
+          <span>Travel</span>
+        </div>
+      </div>
+      <div class="portfolio-item">
+        <div class="portfolio-overlay"></div>
+        <div class="portfolio-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+          <span>Portrait</span>
+        </div>
+      </div>
+    </div>
+
+    <p style="margin-top: 2rem; font-size: 0.8rem; color: var(--muted); text-align:center;">
+      🖼️ <em>Apni real photos upload karo — inko replace kar dena GitHub par</em>
+    </p>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <p class="section-label">Let's Connect</p>
+    <h2 class="section-title">Get In<br>Touch</h2>
+    <div class="contact-grid">
+      <div>
+        <p class="contact-intro">
+          Whether you need a photographer for your project, want to collaborate,
+          or simply want to talk — I'm always open to a conversation. Let's create
+          something meaningful together.
+        </p>
+        <div class="contact-links">
+          <a class="contact-link" href="mailto:your@email.com">
+            <span class="contact-link-icon">✉️</span>
+            your@email.com
+          </a>
+          <a class="contact-link" href="#">
+            <span class="contact-link-icon">📸</span>
+            @ahmed_photography (Instagram)
+          </a>
+          <a class="contact-link" href="#">
+            <span class="contact-link-icon">📍</span>
+            Mansehra, KPK, Pakistan
+          </a>
+        </div>
+      </div>
+
+      <div class="contact-form">
+        <div class="form-group">
+          <label class="form-label">Your Name</label>
+          <input class="form-input" type="text" placeholder="e.g. Ali Hassan"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input class="form-input" type="email" placeholder="you@example.com"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Message</label>
+          <textarea class="form-textarea" placeholder="Tell me about your project..."></textarea>
+        </div>
+        <button class="form-btn">Send Message →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>© 2025 Ahmed. All rights reserved.</span>
+    <span>Made with ❤️ in <a href="#">Mansehra</a></span>
+  </footer>
+
+</body>
+</html>
